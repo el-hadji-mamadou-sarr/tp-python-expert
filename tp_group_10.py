@@ -26,7 +26,11 @@ def count_letters(word):
     :param word: mot
     :return: dictionnaire de lettres et de leur nombre d'occurence
     """
-    counts = {} 
+
+    # map qui contient les lettres et leur nombre d'occurence
+    counts = {}
+
+    # set de lettres dans le mot 
     temp = set(word)
     
     for i in temp:
@@ -42,7 +46,11 @@ def replaceLetter(word, new_letter):
     :param new_letter: nouvelle lettre
     :return: mot avec la lettre remplacée
     """
+
+    # récupération des lettres et de leur nombre d'occurence
     counts = count_letters(word)
+
+    # lettre avec la fréquence max avec laquelle on va remplacer et on a acces
     lettre_max = max(counts, key=counts.get)
     return word.replace(lettre_max, new_letter)
 
@@ -55,9 +63,17 @@ def replaceAllLetters(word, new_letter):
     :return: mot avec la lettre remplacée
     """
     counts = count_letters(word)
+
+    # liste de valeurs de la map counts: que des nombres
     counts_vals = list(counts.values())
+
+    # fréquence max
     _max = max(counts_vals)
+
+    # liste de clés de la map counts avec la fréq max: que des lettres
     list_max = [key for key,val in counts.items() if val==_max]
+
+    # remplacement
     for elt in list_max:
         word = word.replace(elt, new_letter)
     return word
@@ -93,6 +109,7 @@ def nombre_pronoms(texte):
     :return: nombre de pronom
     """
     nbrePronoms = 0
+    # si le pronom est dans le texte, on incrémente le nombre de pronom
     for pronom in pronoms:
         if pronom in texte:
             nbrePronoms +=1
@@ -112,6 +129,17 @@ def saveToJson(texte):
 
 
 # question 5: Quel est le mot le plus utilisé dans le texte
+def clean_text(texte):
+    """"
+    nettoyer le texte
+    :param texte: texte
+    :return: texte nettoyé
+    """
+    # on nettoie le texte
+    texte = texte.replace("'", 'e ')
+    texte = texte.replace('.',' ')
+    texte = texte.replace(',',' ')
+    return texte
 
 def mot_plus_utilise(texte):
     """"
@@ -119,11 +147,14 @@ def mot_plus_utilise(texte):
     :param texte: texte
     :return: mot le plus utilisé
     """
-    list_mots = texte.replace("'", 'e ')
-    list_mots = texte.replace('.',' ')
-    list_mots = texte.replace(',',' ')
+
+    # on nettoie le texte
+    texte= clean_text(texte)
+
+    # on récupère les mots dans une liste
     list_mots = texte.split(' ')
 
+    # on compte le nombre d'occurence de chaque mot
     occurence = {}
     for elt in list_mots:
         if elt in occurence:
@@ -140,6 +171,8 @@ def max_word_sans_pronons(texte):
     :param texte: texte
     :return: mot le plus utilisé sans les pronoms
     """
+
+    # on récupre le mot le plus utilisé et si c'est un pronom on le supprime et on reprend
     res = mot_plus_utilise(texte)
     if res in pronoms:
         texte = delete_letter(texte, res)
@@ -159,16 +192,16 @@ def couples(liste):
     couples = []
     j=0
     len_liste = len(liste)
+    # on regarde si on a atteint la fin de la liste
     while j<len_liste:
+        # si la valeur n'est pas dans le set, on l'ajoute et on parcourt le reste de la liste pour trouver les couples
         if not (liste[j] in memo ):
-            print(liste[j])
             memo.add(liste[0])
+            # on parcourt le reste de la liste pour trouver les couples
             for i in range(j, len_liste):
+                
                 if liste[j]  != liste[i] and not (liste[i] in memo):
                     couples.append((liste[j]+ liste[i]))
         j+=1
     return couples
         
-    
-
-print(couples(suivanteelems))
